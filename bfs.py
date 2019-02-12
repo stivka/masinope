@@ -26,15 +26,30 @@ def minu_otsing(kaart):
     # start(y, x) ehk start(row, col)
     start = (14, 16)
     
-    
-
-    return 0
-
-def createMap(map):
-    for row in range(0, len(map)):
-        for col in range(0, len(map[0])):
-            print (len(map[0]))
     return
 
+def createMatrix(map):
+    
+    
+
+    
+
+    matrix = []
+
+    for row in range(0, len(map)):
+        matrixRow = []
+        for col in range(0, len(map[0])):
+            matrixRow.append(map[row][col])
+        matrix.append(matrixRow)
+    
+    print (len(map))
+    print (len(map[0]))
+    print (len(matrix))
+    print (len(matrix[0]))
+    
+    return
+
+
+
+createMatrix(lava_map1)
 minu_otsing(lava_map1)
-createMap(lava_map1)
