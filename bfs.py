@@ -19,37 +19,62 @@ lava_map1 = [
     "                               ",
     "                s              ",
 ]
-start_row=14
-start_col=16
+start_row = 14
+start_col = 16
 
-def minu_otsing(kaart):
-    # start(y, x) ehk start(row, col)
-    start = (14, 16)
-    
-    return
 
-def createMatrix(map):
-    
-    
-
-    
-
-    matrix = []
+def createMatrix(matrix, map):
 
     for row in range(0, len(map)):
         matrixRow = []
         for col in range(0, len(map[0])):
             matrixRow.append(map[row][col])
         matrix.append(matrixRow)
-    
-    print (len(map))
-    print (len(map[0]))
-    print (len(matrix))
-    print (len(matrix[0]))
-    
+
     return
 
 
+def printMatrix(matrix):
+    for row in range(0, len(matrix)):
+        for col in range(0, len(matrix[0])):
+            print(matrix[row][col], end=" ")
+        print(" ")
 
-createMatrix(lava_map1)
+
+def expandFrontier(matrix, startingPosition):
+    frontier = Queue()
+
+
+frontier.put(startingPosition)
+came_from = {}
+came_from[startingPosition] = None
+
+while not frontier.empty():
+   current = frontier.get()
+   for next in getNeighbours(current):
+      if next not in came_from:
+         frontier.put(next)
+         came_from[next] = current
+
+
+    if (matrix[startingPosition[0] + 1][startingPosition[1]] is " "):
+        print("is empty")
+
+
+    return
+
+def getNeighbours(pivot):
+    
+    
+    return
+
+def minu_otsing(kaart):
+    startingPosition = (14, 16)
+    matrix = [] 
+    createMatrix(matrix, lava_map1)
+    printMatrix(matrix)
+    expandFrontier(matrix, startingPosition)
+    
+    return
+
 minu_otsing(lava_map1)
