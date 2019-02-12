@@ -24,7 +24,6 @@ start_col = 16
 
 
 def createMatrix(matrix, map):
-
     for row in range(0, len(map)):
         matrixRow = []
         for col in range(0, len(map[0])):
@@ -40,41 +39,65 @@ def printMatrix(matrix):
             print(matrix[row][col], end=" ")
         print(" ")
 
+def getNeighbours(pivot):
+    pRow = pivot[0]
+    pCol = pivot[1]
+
+    neighbours = []
+    
+    # above
+    if (pRow + 1 < rows):
+        if (matrix[pRow + 1][pCol] is " "):
+            neighbour = (pRow + 1, pCol)
+            neighbours.append(neighbour)
+    # left
+    if (pCol - 1 >= 0):
+        if (matrix[pRow][pCol - 1] is " "):
+            neighbour = (pRow, pCol -1)
+            neighbours.append(neighbour)
+    # below
+    if (pRow - 1 >= 0):
+        if (matrix[pRow - 1][pCol] is " "):
+            neighbour = (pRow - 1, pCol)
+            neighbours.append(neighbour)
+    # right
+    if (pCol + 1 < cols):
+        if (matrix[pRow][pCol + 1] is " "):
+            neighbour = (pRow, pCol +1)
+            neighbours.append(neighbour)
+
+    return neighbours
+
 
 def expandFrontier(matrix, startingPosition):
     frontier = Queue()
+    frontier.put(startingPosition)
+    came_from = {}
+    came_from[startingPosition] = None
+
+    while not frontier.empty():
+        current = frontier.get()
+    
+        neighbours = getNeighbours(current, matrix)
+        
+        for x in neighbours:
+            if next not in came_from:
+                frontier.put(next)
+                came_from[next] = current
 
 
-frontier.put(startingPosition)
-came_from = {}
-came_from[startingPosition] = None
-
-while not frontier.empty():
-   current = frontier.get()
-   for next in getNeighbours(current):
-      if next not in came_from:
-         frontier.put(next)
-         came_from[next] = current
-
-
-    if (matrix[startingPosition[0] + 1][startingPosition[1]] is " "):
-        print("is empty")
+    
 
 
     return
 
-def getNeighbours(pivot):
-    
-    
-    return
 
-def minu_otsing(kaart):
-    startingPosition = (14, 16)
-    matrix = [] 
-    createMatrix(matrix, lava_map1)
-    printMatrix(matrix)
-    expandFrontier(matrix, startingPosition)
     
-    return
+startingPosition = (14, 16)
+matrix = [] 
+createMatrix(matrix, lava_map1)
+rows = len(matrix)
+cols = len(matrix[0])
 
-minu_otsing(lava_map1)
+printMatrix(matrix)
+expandFrontier(matrix, startingPosition)
