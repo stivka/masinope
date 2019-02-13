@@ -22,6 +22,24 @@ lava_map1 = [
 start_row = 14
 start_col = 16
 
+lava_map2 = [
+    "     **********************    ",
+    "   *******   D    **********   ",
+    "   *******                     ",
+    " ****************    **********",
+    "***********          ********  ",
+    "            *******************",
+    " ********    ******************",
+    "********                   ****",
+    "*****       ************       ",
+    "***               *********    ",
+    "*      ******      ************",
+    "*****************       *******",
+    "***      ****            ***** ",
+    "                               ",
+    "                s              ",
+]
+
 
 def createMatrix(matrix, map):
     for row in range(0, len(map)):
@@ -51,25 +69,21 @@ def getNeighbours(pivot):
         if (matrix[pRow + 1][pCol] is " " or matrix[pRow + 1][pCol] is "D"):
             neighbour = (pRow + 1, pCol)
             neighbours.append(neighbour)
-            matrix[pRow + 1][pCol] = "d"
     # left
     if (pCol - 1 >= 0):
         if (matrix[pRow][pCol - 1] is " " or matrix[pRow][pCol - 1] is "D"):
             neighbour = (pRow, pCol - 1)
             neighbours.append(neighbour)
-            matrix[pRow][pCol - 1] = "r"
     # below
     if (pRow - 1 >= 0):
         if (matrix[pRow - 1][pCol] is " " or matrix[pRow - 1][pCol] is "D"):
             neighbour = (pRow - 1, pCol)
             neighbours.append(neighbour)
-            matrix[pRow - 1][pCol] = "u"
     # right
     if (pCol + 1 < cols):
         if (matrix[pRow][pCol + 1] is " " or matrix[pRow][pCol + 1] is "D"):
             neighbour = (pRow, pCol + 1)
             neighbours.append(neighbour)
-            matrix[pRow][pCol + 1] = "l"
 
     return neighbours
 
@@ -98,8 +112,6 @@ def expandFrontier(matrix, startingPosition):
 
 
 def traceBack(current, came_from):
-    
-    path = []
     while current != startingPosition:
         path.append(current)
         current = came_from[current]
@@ -114,20 +126,27 @@ def printList(list):
         print(x)
     return
 
+def addTrail():
+    for position in path:
+        matrix[position[0]][position[1]] = "."
+    matrix[path[0][0]][path[0][1]] = "S"
+    matrix[path[-1][0]][path[-1][1]] = "D"
+
+    return
 
 startingPosition = (14, 16)
 matrix = []
-createMatrix(matrix, lava_map1)
+createMatrix(matrix, lava_map2)
 rows = len(matrix)
 cols = len(matrix[0])
 
 frontier = Queue()
 came_from = {}
 
+path = []
+
 printMatrix(matrix)
 print("")
 expandFrontier(matrix, startingPosition)
+addTrail()
 printMatrix(matrix)
-
-printList(came_from)
-
