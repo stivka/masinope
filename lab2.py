@@ -1,4 +1,5 @@
-from queue import Queue
+from queue import Queue, PriorityQueue
+import math
 
 # map on 15 kõrge ja 31 lai
 
@@ -51,12 +52,14 @@ def getNeighbours(pivot):
 
 def expandFrontier(matrix, startingPosition):
     
-    frontier.put(startingPosition)
-    
+    frontier.put((0, startingPosition))
     came_from[startingPosition] = None
 
+    # We take from the frontier PriorityQueue the node with the smallest distance toward the goal, that is they are sorted as smallest priority on top.
+    
     while not frontier.empty():
         current = frontier.get()
+        print(current)
 
         if matrix[current[0]][current[1]] == 'D':
             print("Diamond found!")
@@ -67,10 +70,18 @@ def expandFrontier(matrix, startingPosition):
 
         for next in neighbours:
             if next not in came_from:
-                frontier.put(next)
+                priority = MDistance(next, goalPosition)
+                frontier.put(priority, next)
                 came_from[next] = current
     return
 
+# node is coordinates of position
+def MDistance(node, goal):
+    verticalDistance = goal[0] - node[0]
+    horizontalDistance = goal[1] - node[1]
+    distance = math.sqrt(math.pow(verticalDistance, 2) + math.pow(horizontalDistance, 2))
+
+    return distance
 
 def traceBack(current, came_from):
     while current != startingPosition:
@@ -98,19 +109,24 @@ def addTrail():
 with open("cave300x300") as f:
     map_data = [l.strip() for l in f.readlines() if len(l)>1]
 
-startingPosition = (14, 16)
+startingPosition = (2, 2)
+goalPosition = (295, 257)
+#goalPosition300 = (295, 257)
+#goalPosition600 = (598, 595)
+#goalPosition900 = (898, 895)
+
 matrix = []
 createMatrix(matrix, map_data)
 rows = len(matrix)
 cols = len(matrix[0])
 
-frontier = Queue()
+frontier = PriorityQueue()
 came_from = {}
 
 path = []
 
-printMatrix(matrix)
+#printMatrix(matrix)
 print("")
 expandFrontier(matrix, startingPosition)
-addTrail()
-printMatrix(matrix)
+#addTrail()
+#printMatrix(matrix)
