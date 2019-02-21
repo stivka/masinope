@@ -1,0 +1,7 @@
+bfs is a Breadth First Search algorithm.
+It works as follows:
+Create a frontier, that is, an expanding ring of possible movements through the map, that materializes as a list.
+Once the the target is reached the expansion of the frontier is halted.
+Then the route from the target to source is traced back. This is done in such a way, that all positions have knowledge of the previous position that lead to them. Accordingly we just trace from one position to the position that lead to that position and so on until we reach the starting point.
+Large amount of the code originates from https://www.redblobgames.com/pathfinding/a-star/introduction.html
+A necessary piece of code that I added to the code from the forementioned link, was code that probed the neighbouring squares of the map. Passing on possible neighbours that can be added to the expanding frontier.
