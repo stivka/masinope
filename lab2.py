@@ -20,9 +20,9 @@ def printMatrix(matrix):
         print(" ")
 
 
-def getNeighbours(pivot):
-    pRow = pivot[0]
-    pCol = pivot[1]
+def getNeighbours(current):
+    pRow = current[0]
+    pCol = current[1]
 
     neighbours = []
 
@@ -52,34 +52,35 @@ def getNeighbours(pivot):
 
 def expandFrontier(matrix, startingPosition):
     
-    frontier.put((0, startingPosition))
+    frontier.put((startingPosition, 0))
     came_from[startingPosition] = None
 
     # We take from the frontier PriorityQueue the node with the smallest distance toward the goal, that is they are sorted as smallest priority on top.
-    
-    while not frontier.empty():
-        current = frontier.get()
-        print(current)
 
-        if matrix[current[0]][current[1]] == 'D':
-            print("Diamond found!")
-            traceBack(current, came_from)
-            break
+    while not frontier.empty():
+        current = frontier.get()[0]
+
+        #if matrix[current[0]][current[1]] == 'D':
+            #print("Diamond found!")
+            #traceBack(current, came_from)
+            #break 
 
         neighbours = getNeighbours(current)
 
         for next in neighbours:
             if next not in came_from:
                 priority = MDistance(next, goalPosition)
-                frontier.put(priority, next)
+                frontier.put(next, priority)
                 came_from[next] = current
+        for i in came_from:
+            print(i)
     return
 
 # node is coordinates of position
 def MDistance(node, goal):
     verticalDistance = goal[0] - node[0]
     horizontalDistance = goal[1] - node[1]
-    distance = math.sqrt(math.pow(verticalDistance, 2) + math.pow(horizontalDistance, 2))
+    distance = verticalDistance + horizontalDistance
 
     return distance
 
@@ -126,7 +127,6 @@ came_from = {}
 path = []
 
 #printMatrix(matrix)
-print("")
 expandFrontier(matrix, startingPosition)
 #addTrail()
 #printMatrix(matrix)
