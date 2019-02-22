@@ -90,8 +90,8 @@ def traceBack(current, came_from):
     while current != startingPosition:
         path.append(current)
         current = came_from[current]
-    path.append(startingPosition)  # optional
-    path.reverse()  # optional
+    path.append(startingPosition)
+    path.reverse()
 
     print("Path length is " + str(len(path) - 1) + str(" movements."))
     return path
