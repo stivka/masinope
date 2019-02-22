@@ -12,14 +12,6 @@ def createMatrix(matrix, map):
 
     return
 
-
-def printMatrix(matrix):
-    for row in range(0, len(matrix)):
-        for col in range(0, len(matrix[0])):
-            print(matrix[row][col], end=" ")
-        print(" ")
-
-
 def getNeighbours(current):
     pRow = current[0]
     pCol = current[1]
@@ -51,7 +43,8 @@ def getNeighbours(current):
 
 
 def expandFrontier(matrix, startingPosition):
-    
+    exploredPositions = 0
+
     frontier.put(startingPosition, 0)
     came_from[startingPosition] = None
 
@@ -60,9 +53,11 @@ def expandFrontier(matrix, startingPosition):
     while not frontier.empty():
 
         current = frontier.get()
+        exploredPositions += 1
 
         if matrix[current[0]][current[1]] == 'D':
             print("Diamond found!")
+            print(str(exploredPositions) + " positions visited.")
             traceBack(current, came_from)
             break 
 
@@ -71,7 +66,6 @@ def expandFrontier(matrix, startingPosition):
         for next in neighbours:
             if next not in came_from:
                 priority = MDistance(next, goalPosition)
-                priorityNode = [next, priority]
                 frontier.put(next, priority)
                 came_from[next] = current
                    
@@ -92,23 +86,26 @@ def traceBack(current, came_from):
     path.append(startingPosition)  # optional
     path.reverse()  # optional
 
-    print (path)
+    print("Path length is " + str(len(path)))
     return path
-
-def printList(list):
-    for x in list:
-        print(x)
-    return
 
 def addTrail():
     for position in path:
-        matrix[position[0]][position[1]] = "."
+        matrix[position[0]][position[1]] = "o"
     matrix[path[0][0]][path[0][1]] = "S"
     matrix[path[-1][0]][path[-1][1]] = "D"
 
     return
 
+def writeToFile(matrix):
+    f = open('solved_map.txt', 'w')
 
+    for row in range(0, len(matrix)):
+        for col in range(0, len(matrix[0])):
+            f.write(matrix[row][col])
+        f.write("\n")
+    f.close()
+    return
 
 with open("cave300x300") as f:
     map_data = [l.strip() for l in f.readlines() if len(l)>1]
@@ -129,8 +126,6 @@ came_from = {}
 
 path = []
 
-#printMatrix(matrix)
 expandFrontier(matrix, startingPosition)
 addTrail()
-#printMatrix(matrix)
-writeToFile()
+writeToFile(matrix)
