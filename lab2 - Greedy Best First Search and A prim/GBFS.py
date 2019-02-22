@@ -1,5 +1,6 @@
 from queue import Queue, PriorityQueue
 import math
+import time
 
 # map on 15 kõrge ja 31 lai
 
@@ -86,7 +87,7 @@ def traceBack(current, came_from):
     path.append(startingPosition)  # optional
     path.reverse()  # optional
 
-    print("Path length is " + str(len(path)))
+    print("Path length is " + str(len(path)) + str(" movements."))
     return path
 
 def addTrail():
@@ -107,11 +108,14 @@ def writeToFile(matrix):
     f.close()
     return
 
-with open("cave300x300") as f:
+# Set the map file
+with open("lab2 - Greedy Best First Search and A prim\cave600x600") as f:
     map_data = [l.strip() for l in f.readlines() if len(l)>1]
 
 startingPosition = (2, 2)
-goalPosition = (295, 257)
+
+#Set the goalPosition for the selected map. The values below mark where the goal is located on the specific map
+goalPosition = (598, 595)
 #goalPosition300 = (295, 257)
 #goalPosition600 = (598, 595)
 #goalPosition900 = (898, 895)
@@ -126,6 +130,12 @@ came_from = {}
 
 path = []
 
+# The program starts of from the function expandFrontier, also a timer is set from here.
+start_time = time.time()
 expandFrontier(matrix, startingPosition)
-addTrail()
-writeToFile(matrix)
+elapsed_time = time.time() - start_time
+print("Time taken to find diamond was " + str(round(elapsed_time, 2)) + str(" seconds."))
+
+# Also adds a trail of the movenent from start to goal. Writes it to file since the maps are too large to display in console.
+#addTrail()
+#writeToFile(matrix)

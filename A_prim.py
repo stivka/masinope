@@ -1,5 +1,6 @@
 from queue import Queue, PriorityQueue
 import math
+import time
 
 # map on 15 kõrge ja 31 lai
 
@@ -45,8 +46,11 @@ def getNeighbours(current):
 def expandFrontier(matrix, startingPosition):
     exploredPositions = 0
 
+    # Take in the node.
     frontier.put(startingPosition, 0)
+    # In the dictionary i set the the came_from for the startingPosition to None
     came_from[startingPosition] = None
+    cost_so_far[startingPosition] = 0
 
     # We take from the frontier PriorityQueue the node with the smallest distance toward the goal, that is they are sorted as smallest priority on top.
     
@@ -54,6 +58,7 @@ def expandFrontier(matrix, startingPosition):
 
         current = frontier.get()
         exploredPositions += 1
+        new_cost = 0
 
         if matrix[current[0]][current[1]] == 'D':
             print("Diamond found!")
@@ -64,8 +69,10 @@ def expandFrontier(matrix, startingPosition):
         neighbours = getNeighbours(current)
 
         for next in neighbours:
-            if next not in came_from:
-                priority = MDistance(next, goalPosition)
+            new_cost = cost_so_far[current] + 1
+            if next not in cost_so_far or new_cost < cost_so_far[next]:
+                cost_so_far[next] = new_cost
+                priority = MDistance(next, goalPosition) + new_cost
                 frontier.put(next, priority)
                 came_from[next] = current
                    
@@ -86,7 +93,7 @@ def traceBack(current, came_from):
     path.append(startingPosition)  # optional
     path.reverse()  # optional
 
-    print("Path length is " + str(len(path)))
+    print("Path length is " + str(len(path) - 1) + str(" movements."))
     return path
 
 def addTrail():
@@ -107,11 +114,15 @@ def writeToFile(matrix):
     f.close()
     return
 
-with open("cave300x300") as f:
+# Set the map file
+with open("lab2 - Greedy Best First Search and A prim\cave600x600") as f:
     map_data = [l.strip() for l in f.readlines() if len(l)>1]
 
 startingPosition = (2, 2)
-goalPosition = (295, 257)
+
+#Set the goalPosition for the selected map. The values below mark where the goal is located on the specific map
+
+goalPosition = (598, 595)
 #goalPosition300 = (295, 257)
 #goalPosition600 = (598, 595)
 #goalPosition900 = (898, 895)
@@ -123,9 +134,16 @@ cols = len(matrix[0])
 
 frontier = PriorityQueue()
 came_from = {}
+cost_so_far = {}
 
 path = []
 
+# The program starts of from the function expandFrontier, also a timer is set from here.
+start_time = time.time()
 expandFrontier(matrix, startingPosition)
-addTrail()
-writeToFile(matrix)
+elapsed_time = time.time() - start_time
+print("Time taken to find diamond was " + str(round(elapsed_time, 2)) + str(" seconds."))
+
+# Also adds a trail of the movenent from start to goal. Writes it to file since the maps are too large to display in console.
+#addTrail()
+#writeToFile(matrix)
