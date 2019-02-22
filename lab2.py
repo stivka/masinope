@@ -52,28 +52,29 @@ def getNeighbours(current):
 
 def expandFrontier(matrix, startingPosition):
     
-    frontier.put((startingPosition, 0))
+    frontier.put(startingPosition, 0)
     came_from[startingPosition] = None
 
     # We take from the frontier PriorityQueue the node with the smallest distance toward the goal, that is they are sorted as smallest priority on top.
-
+    
     while not frontier.empty():
-        current = frontier.get()[0]
 
-        #if matrix[current[0]][current[1]] == 'D':
-            #print("Diamond found!")
-            #traceBack(current, came_from)
-            #break 
+        current = frontier.get()
+
+        if matrix[current[0]][current[1]] == 'D':
+            print("Diamond found!")
+            traceBack(current, came_from)
+            break 
 
         neighbours = getNeighbours(current)
 
         for next in neighbours:
             if next not in came_from:
                 priority = MDistance(next, goalPosition)
+                priorityNode = [next, priority]
                 frontier.put(next, priority)
                 came_from[next] = current
-        for i in came_from:
-            print(i)
+                   
     return
 
 # node is coordinates of position
@@ -107,6 +108,8 @@ def addTrail():
 
     return
 
+
+
 with open("cave300x300") as f:
     map_data = [l.strip() for l in f.readlines() if len(l)>1]
 
@@ -128,5 +131,6 @@ path = []
 
 #printMatrix(matrix)
 expandFrontier(matrix, startingPosition)
-#addTrail()
+addTrail()
 #printMatrix(matrix)
+writeToFile()
