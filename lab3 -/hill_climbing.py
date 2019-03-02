@@ -1,5 +1,7 @@
 def hill_climbing(pos):
+
     curr_value = pos.value()
+
     while True:
         move, new_value = pos.best_move()
         if new_value >= curr_value:
@@ -10,6 +12,7 @@ def hill_climbing(pos):
             curr_value = new_value
             pos.make_move(move)
 
+
 class Queen:
     def __init__(self, col, row):
         self.col = col
@@ -17,10 +20,15 @@ class Queen:
         # indicates number of conflicts, 0 is no conflicts - best value
         self.value = 0
 
+    # calculate no. of conflicts
+    def calculateValue(self, board):
+        print("Queen " + str(self.col) + " on row " + str(self.row))
+
     def best_move(self):
         # find the best move and the value function after making that move
         # return move, value
         return
+
 
 class Board:
     def __init__(self, N):
@@ -29,7 +37,7 @@ class Board:
         self.array = []
         self.matrix = []
         self.queens = []
-        
+
         self.createMatrix()
         # places all queens on row 0
         self.placeQueens(0)
@@ -40,6 +48,12 @@ class Board:
 
     def getArray(self):
         return self.array
+
+    def getQueens(self):
+        return self.queens
+    
+    def getQueen(self, col):
+        return self.queens[col]
 
     def createArray(self):
         for i in range(0, self.N):
@@ -59,14 +73,19 @@ class Board:
             queen = Queen(col, row)
             self.queens.append(queen)
             self.matrix[0][col] = "Q"
-        
+
     def printMatrix(self):
         for col in range(0, len(self.matrix)):
             for row in range(0, len(self.matrix[0])):
                 print(self.matrix[col][row], end=" ")
             print(" ")
 
+
 # create 4x4 board
 board = Board(4)
 board.printMatrix()
-    
+
+for i in range(len(board.queens)):
+    board.queens[i].calculateValue(board)
+    #board.getQueen(i).calculateValue
+    #hill_climbing(q)
