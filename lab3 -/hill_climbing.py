@@ -1,5 +1,5 @@
 def hill_climbing(pos):
-
+    
     curr_value = pos.value()
 
     while True:
@@ -145,4 +145,4 @@ for i in range(len(board.queens)):
     board.queens[i].calculateValue(board)
 #board.queens[1].calculateValue(board)
     # board.getQueen(i).calculateValue
-    # hill_climbing(q)
+    # hill_climbing(q) 
