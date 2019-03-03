@@ -1,17 +1,41 @@
-def hill_climbing(board):
+def hill_climbing(N):
+    current_board = Board(N)
+    new_board = current_board
+    best_board = current_board
+    boards = []
+    used_states = 0
     
-    curr_value = board.value()
 
-    while True:
-        move, new_value = pos.best_move()
-        if new_value >= curr_value:
-            # no improvement, give up
-            return pos, curr_value
+    while (used_states <= N**N):
+        used_states += 1
+        boards = []
+        
+        # Adds all boards with one different move made by 
+        for q in current_board.queens:
+            for row in range(0, N):
+                #print ("Moving queen " + str(q.row) + " of row " + str(q.col))
+                # if isn't the current row that queen is on
+                if (current_board.matrix[row][q.col] == "O"):
+                    #print("Can move Queen " + str(q.col) + " to row " + str(row))
+                    new_board = current_board
+                    
+                    new_board.makeMove(q, row)
+                    new_board.calculateValue()
+                    boards.append(new_board)
+        # for 4 boards we get 4 * (4-1) boards everytime 
+        #print (len(boards))
+
+        for b in boards:
+            if(b.value < best_board.value):
+                print (b.value)
+                print (best_board.value)
+                best_board = boards[b]
+                if(best_board.value == 0):
+                  return best_board.printMatrix
+
         else:
-            # position improves, keep searching
-            curr_value = new_value
-            pos.make_move(move)
-
+            return best_board.printMatrix
+        
 class Queen:
     def __init__(self, row, col):
         self.col = col
@@ -29,7 +53,7 @@ class Queen:
         conflictOnDiag = False
         conflictOnCDiag = False
 
-        for i in range (0, board.N):
+        for i in range(0, board.N):
             # checks whole column. If isn't itself and is a Queen
             if(i != self.row and matrix[i][self.col] == "Q" and not conflictOnCol):
                 self.value += 1
@@ -42,7 +66,7 @@ class Queen:
                 #conflictOnRow = True
                 #print("Queen " + str(self.col) + " has conflict on row")
 
-        for i in range (1, board.N):
+        for i in range(1, board.N):
             # check diagonal down
             new_col = self.col + i
             new_row = self.row + i
@@ -59,7 +83,7 @@ class Queen:
                     self.value += 1
                     #conflictOnDiag = True
                     #print("Queen " + str(self.col) + " has conflict on diagonal")
-            
+
             # check counter-diagonal up
             new_col = self.col + i
             new_row = self.row - i
@@ -77,18 +101,12 @@ class Queen:
                     self.value += 1
                     #conflictOnCDiag = True
                     #print("Queen " + str(self.col) + " has conflict on counter-diagonal down")
-                    #print("Col " + str(self.col) + " Row " + str(self.row) 
-                    #+ " New-col " + str(new_col) + " New-row " + str(new_row))
+                    # print("Col " + str(self.col) + " Row " + str(self.row)
+                    # + " New-col " + str(new_col) + " New-row " + str(new_row))
 
-
-        print("Queen " + str(self.col) + " has " + str(self.value) + " conflict(s).")
+        #print("Queen " + str(self.col) + " has " +
+              #str(self.value) + " conflict(s).")
         return self.value
-
-    def best_move(self):
-        # find the best move and the value function after making that move
-        # return move, value
-        return 
-
 
 class Board:
     def __init__(self, N):
@@ -104,18 +122,24 @@ class Board:
         self.placeAndCreateQueens(0)
         self.calculateValue()
 
-    def makeMove(self, q, move):
-        
-        return 0
+    def makeMove(self, q, row):
+        self.matrix[q.row][q.col] = "O"
+        self.matrix[row][q.col] = "Q"
+
+        q.row = row
+        #print("Queen " + str(q.col) + " now on row " + str(q.row))
+        return
 
     '''def createArray(self):
         for i in range(0, self.N):
             self.array.append(0)
         return self.array'''
+
     def calculateValue(self):
+        self.value = 0
         for i in range(len(self.queens)):
             self.value += self.queens[i].calculateValue(self)
-            print ("Value for board state is: " + str(self.value))
+            #print("Value for board state is: " + str(self.value))
         return self.value
 
     def createMatrix(self):
@@ -138,31 +162,12 @@ class Board:
                 print(self.matrix[col][row], end=" ")
             print(" ")
 
+
 def printMatrix(matrix):
-        for col in range(0, len(matrix)):
-            for row in range(0, len(matrix[0])):
-                print(matrix[col][row], end=" ")
-            print(" ")
+    for col in range(0, len(matrix)):
+        for row in range(0, len(matrix[0])):
+            print(matrix[col][row], end=" ")
+        print(" ")
 
-# create 4x4 board
-N = 4
-board = Board(4)
-#board.printMatrix()
-#hill_climbing(board)
-boards = []
-# for board state in possible alternatives when moving one queen on column
-for q in board.queens:
-    for row in range(0, N):
-        #print ("Moving queen " + str(q.row) + " of row " + str(q.col))
-        # if isn't the current row that queen is on
-        if (board.matrix[row][q.col] == "O"):
-            #print("Can move Queen " + str(q.col) + " to row " + str(row))
-            
-
-        #board.makeMove(q, move)
-        #boards.append(board.calculateValue)
-
-
-#board.queens[1].calculateValue(board)
-    # board.getQueen(i).calculateValue
-    # hill_climbing(q)    
+# start hill_climbing solution finding for queens problem on 4x4 board
+hill_climbing(4)
